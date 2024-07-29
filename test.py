@@ -2,7 +2,7 @@ import random
 import time
 import heapq
 import copy
-from main import priorityq
+from priorityq import priorityq
 
 def my_test(lst:list):
     print(lst[0:10])
