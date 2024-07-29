@@ -1,6 +1,7 @@
 import random
 import time
 import heapq
+import copy
 
 class priorityq:
     def __init__(self,data:list[int]):
@@ -29,16 +30,12 @@ class priorityq:
         self.data.insert(0, newitem)
 
         current_index = 0
+        current_item = self.data[current_index]
         while (child_index := current_index * 2 + 1) <= self.last_index: # 子供のindexがリストの範囲内
             left_item = self.data[child_index]
             child_index += 1
-            # print(self.data[current_index])
-            current_item = self.data[current_index]
             if child_index > self.last_index:
                 if left_item < current_item:
-                    # self.swap(child_index - 1, current_index)
-                    # print(self.data[current_index])
-                    self.data[child_index - 1] = current_item
                     self.data[current_index] = left_item
                     current_index = child_index - 1
                 break
@@ -46,59 +43,47 @@ class priorityq:
             right_item = self.data[child_index]
             if right_item < current_item:
                 if right_item < left_item:
-                    # self.swap(child_index, current_index)
-                    self.data[child_index] = current_item
                     self.data[current_index] = right_item
                     current_index = child_index
                 else:
-                    # left_item がright_itemよりも小さい
-                    # self.swap(child_index - 1, current_index)
-                    self.data[child_index - 1] = current_item
                     self.data[current_index] = left_item
                     current_index = child_index - 1
             elif left_item < current_item:
-                # self.swap(child_index - 1, current_index)
-                self.data[child_index - 1] = current_item
                 self.data[current_index] = left_item
                 current_index = child_index - 1
             else:
                 break
-        # self.data[current_index] = newitem
+        self.data[current_index] = newitem
         return rvalue
 
-    def swap(self,index_a:int,index_b:int):
-        self.data[index_b], self.data[index_a] = self.data[index_a], self.data[index_b]
-
-def my_test():
-    a = [i for i in range(10000)]
-    random.shuffle(a)
+def my_test(lst:list):
+    print(lst[0:10])
     pq=priorityq([])
-    for i in a:
+    for i in lst:
         pq.push(i)
     # print(pq.data)
     push_test(pq.data)
     pre_poped = -100
-    iter100 = (i for i in range(10000))
+    iter100 = (i for i in sorted(lst))
     while pq.data:
         j = pq.pop()
-        assert(j== next(iter100))
+        assert(j == next(iter100))
         push_test(pq.data)
         assert(j >= pre_poped)
         pre_poped = j
     
-def py_test():
-    a = [i for i in range(10000)]
-    random.shuffle(a)
+def py_test(lst:list):
+    print(lst[0:10])
     pq=[]
-    for i in a:
+    for i in lst:
         heapq.heappush(pq,i)
     # print(pq.data)
     push_test(pq)
     pre_poped = -100
-    iter100 = (i for i in range(10000))
+    iter100 = (i for i in sorted(lst))
     while pq:
         j = heapq.heappop(pq)
-        assert(j== next(iter100))
+        assert(j == next(iter100))
         push_test(pq)
         assert(j >= pre_poped)
         pre_poped = j
@@ -133,28 +118,21 @@ def push_test(lst:list):
 if __name__ == "__main__":
     GREEN = '\033[92m'
     END = '\033[0m' 
-    # pq=priorityq([1,3,6,4,8,7])
-    # pq.push(5)
-    # # pq.push(0)
-    
-    # print(pq.last_index, pq.data)
-    # print("poped",pq.pop())
-    # print(pq.last_index, pq.data)
 
+    lst_lst:list[list[int]] = []
+    for i in range(10):
+        lst = list(range(10001))
+        random.shuffle(lst)
+        lst_lst.append(lst)
+    lst_lst2 = copy.deepcopy(lst_lst)
 
-    # pq=priorityq([], 0)
-    # for i in [3,1,4,6,7,8]:
-    #     pq.push(i)
-    # print(pq.data)
-    # pq.push(2)
-    # print(pq.last_index,pq.data)
     now = time.perf_counter()
-    for i in range(10):
-        my_test()
+    for i in lst_lst:
+        my_test(i)
     print(GREEN + f"{time.perf_counter() - now} msec" + END)
-    print(GREEN + "random test (length 100) ---> Ok" + END)
+    print(GREEN + "my random test (length 100) ---> Ok" + END)
     now = time.perf_counter()
-    for i in range(10):
-        py_test()
+    for i in lst_lst2:
+        py_test(i)
     print(GREEN + f"{time.perf_counter() - now} msec" + END)
-    print(GREEN + "random test (length 100) ---> Ok" + END)
+    print(GREEN + "py random test (length 100) ---> Ok" + END)
