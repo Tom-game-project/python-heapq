@@ -1,4 +1,6 @@
 import random
+import time
+import heapq
 
 class priorityq:
     def __init__(self,data:list[int]):
@@ -56,7 +58,7 @@ class priorityq:
     def swap(self,index_a:int,index_b:int):
         self.data[index_b], self.data[index_a] = self.data[index_a], self.data[index_b]
 
-def test():
+def my_test():
     a = [i for i in range(100)]
     random.shuffle(a)
     pq=priorityq([])
@@ -66,14 +68,29 @@ def test():
     push_test(pq.data)
     pre_poped = -100
     iter100 = (i for i in range(100))
-    while len(pq.data) != 0:
+    while pq.data:
         j = pq.pop()
         assert(j== next(iter100))
         push_test(pq.data)
         assert(j >= pre_poped)
         pre_poped = j
     
-
+def py_test():
+    a = [i for i in range(100)]
+    random.shuffle(a)
+    pq=[]
+    for i in a:
+        heapq.heappush(pq,i)
+    # print(pq.data)
+    push_test(pq)
+    pre_poped = -100
+    iter100 = (i for i in range(100))
+    while pq:
+        j = heapq.heappop(pq)
+        assert(j== next(iter100))
+        push_test(pq)
+        assert(j >= pre_poped)
+        pre_poped = j
 
 def push_test(lst:list):
     RED = '\033[31m'
@@ -120,6 +137,13 @@ if __name__ == "__main__":
     # print(pq.data)
     # pq.push(2)
     # print(pq.last_index,pq.data)
+    now = time.perf_counter()
     for i in range(1000):
-        test()
+        my_test()
+    print(GREEN + f"{time.perf_counter() - now} msec" + END)
+    print(GREEN + "random test (length 100) ---> Ok" + END)
+    now = time.perf_counter()
+    for i in range(1000):
+        py_test()
+    print(GREEN + f"{time.perf_counter() - now} msec" + END)
     print(GREEN + "random test (length 100) ---> Ok" + END)
