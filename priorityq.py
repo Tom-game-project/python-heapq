@@ -44,10 +44,11 @@ class priorityq:
                 else:
                     self.data[current_index] = left_item
                     current_index = child_index - 1
+                continue
             elif left_item < current_item:
                 self.data[current_index] = left_item
                 current_index = child_index - 1
-            else:
-                break
+                continue
+            break
         self.data[current_index] = newitem
         return rvalue
