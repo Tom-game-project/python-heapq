@@ -12,10 +12,12 @@ class priorityq:
         while current_index > 0:
             parent_index = (current_index - 1) // 2
             if a < self.data[parent_index]:
-                self.swap(current_index, parent_index)
+                # self.swap(current_index, parent_index)
+                self.data[current_index] = self.data[parent_index]
                 current_index = parent_index
                 continue
             break
+        self.data[current_index] = a
 
     def pop(self):
         rvalue = self.data.pop(0)
@@ -49,14 +51,6 @@ class priorityq:
                 current_index = child_index - 1
             else:
                 break
-
-        # while current_index > 0:
-        #     parent_index = (current_index - 1) // 2
-        #     if self.data[parent_index] > self.data[current_index]:
-        #         self.swap(current_index, parent_index)
-        #         current_index = parent_index
-        #         continue
-        #     break
         return rvalue
 
     def swap(self,index_a:int,index_b:int):
@@ -68,19 +62,17 @@ def test():
     pq=priorityq([])
     for i in a:
         pq.push(i)
-    print(pq.data)
-    # print(pq.last_index, pq.data)
-    # print("poped",pq.pop())
-    # print(pq.last_index, pq.data)
+    # print(pq.data)
     push_test(pq.data)
     pre_poped = -100
+    iter100 = (i for i in range(100))
     while len(pq.data) != 0:
         j = pq.pop()
-        print(j)
+        assert(j== next(iter100))
         push_test(pq.data)
         assert(j >= pre_poped)
         pre_poped = j
-
+    
 
 
 def push_test(lst:list):
@@ -111,6 +103,8 @@ def push_test(lst:list):
         current_index += 1
     
 if __name__ == "__main__":
+    GREEN = '\033[92m'
+    END = '\033[0m' 
     # pq=priorityq([1,3,6,4,8,7])
     # pq.push(5)
     # # pq.push(0)
@@ -126,4 +120,6 @@ if __name__ == "__main__":
     # print(pq.data)
     # pq.push(2)
     # print(pq.last_index,pq.data)
-    test()
+    for i in range(1000):
+        test()
+    print(GREEN + "random test (length 100) ---> Ok" + END)
