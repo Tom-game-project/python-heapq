@@ -10,19 +10,12 @@ class priorityq:
         self.last_index += 1
         current_index = self.last_index
         while current_index > 0:
-            parent_index = (current_index - (2 if current_index % 2 == 0 else 1)) // 2
-            # print("current_index",current_index,
-            #       "parent_index", parent_index,
-            #       "self.data[parent_index]",self.data[parent_index] ,
-            #       "data that ttempt to add ",a ,
-            #       "up ?",self.data[parent_index] > a,
-            #       sep="\n")
-            if self.data[parent_index] > a:
+            parent_index = (current_index - 1) // 2
+            if a < self.data[parent_index]:
                 self.swap(current_index, parent_index)
                 current_index = parent_index
-            else:
-                break
-        # self.last_index += 1
+                continue
+            break
 
     def pop(self):
         rvalue = self.data.pop(0)
@@ -30,28 +23,46 @@ class priorityq:
             return rvalue
         self.last_index -= 1
         self.data.insert(0, self.data.pop(self.last_index))
-    
+
         current_index = 0
         while True:
-            if (child_index := 2*current_index + 1) > self.last_index:
+            child_index = 2 * current_index + 1
+            if child_index > self.last_index:
                 break
-            if self.data[child_index] < self.data[current_index]:
-                self.swap(child_index,current_index)
+            left_item = self.data[child_index]
+            child_index += 1
+            if child_index > self.last_index:
+                if left_item < self.data[current_index]:
+                    self.swap(child_index - 1, current_index)
+                break
+            right_item = self.data[child_index]
+            if right_item < self.data[current_index]:
+                if right_item < left_item:
+                    self.swap(child_index, current_index)
+                    current_index = child_index
+                else:
+                    # left_item がright_itemよりも小さい
+                    self.swap(child_index - 1, current_index)
+                    current_index = child_index - 1
+            elif left_item < self.data[current_index]:
+                self.swap(child_index - 1, current_index)
+                current_index = child_index - 1
             else:
-                child_index += 1
-                if child_index > self.last_index:
-                    break
-                if self.data[child_index] > self.data[current_index]:
-                    self.swap(child_index,current_index)
-            current_index = child_index
+                break
+
+        # while current_index > 0:
+        #     parent_index = (current_index - 1) // 2
+        #     if self.data[parent_index] > self.data[current_index]:
+        #         self.swap(current_index, parent_index)
+        #         current_index = parent_index
+        #         continue
+        #     break
         return rvalue
 
     def swap(self,index_a:int,index_b:int):
         self.data[index_b], self.data[index_a] = self.data[index_a], self.data[index_b]
 
 def test():
-    RED = '\033[31m'
-    END = '\033[0m' 
     a = [i for i in range(100)]
     random.shuffle(a)
     pq=priorityq([])
@@ -61,43 +72,49 @@ def test():
     # print(pq.last_index, pq.data)
     # print("poped",pq.pop())
     # print(pq.last_index, pq.data)
-    current_index = 0
-
-    while True:
-        # 長さを超えたら終わり
-        if current_index > pq.last_index:
-            break
-
-        child_index = current_index*2 + 1
-        if child_index > pq.last_index:
-            current_index += 1
-            continue
-
-        if not (pq.data[current_index] <= pq.data[child_index]):
-            print(RED + "push test failed" + END)
-        
-        child_index += 1
-        if child_index > pq.last_index:
-            current_index += 1
-            continue
-
-        if not (pq.data[current_index] <= pq.data[child_index]):
-            print(RED + "push test failed" + END)
-        current_index += 1
-
+    push_test(pq.data)
     pre_poped = -100
     while len(pq.data) != 0:
         j = pq.pop()
         print(j)
+        push_test(pq.data)
         assert(j >= pre_poped)
         pre_poped = j
 
 
 
+def push_test(lst:list):
+    RED = '\033[31m'
+    END = '\033[0m' 
+    current_index = 0
+    last_index = len(lst) - 1
+    while True:
+        # 長さを超えたら終わり
+        if current_index > last_index:
+            break
+    
+        child_index = current_index*2 + 1
+        if child_index > last_index:
+            current_index += 1
+            continue
+    
+        if not (lst[current_index] <= lst[child_index]):
+            print(RED + "heap structure is wrong" + END)
+        
+        child_index += 1
+        if child_index > last_index:
+            current_index += 1
+            continue
+    
+        if not (lst[current_index] <= lst[child_index]):
+            print(RED + "heap structure is wrong" + END)
+        current_index += 1
+    
 if __name__ == "__main__":
     # pq=priorityq([1,3,6,4,8,7])
     # pq.push(5)
     # # pq.push(0)
+    
     # print(pq.last_index, pq.data)
     # print("poped",pq.pop())
     # print(pq.last_index, pq.data)
