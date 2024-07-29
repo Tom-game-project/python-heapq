@@ -14,7 +14,6 @@ class priorityq:
         while current_index > 0:
             parent_index = (current_index - 1) // 2
             if a < self.data[parent_index]:
-                # self.swap(current_index, parent_index)
                 self.data[current_index] = self.data[parent_index]
                 current_index = parent_index
                 continue
@@ -26,19 +25,19 @@ class priorityq:
         if self.last_index == 0:
             return rvalue
         self.last_index -= 1
-        self.data.insert(0, self.data.pop(self.last_index))
+        newitem = self.data.pop(self.last_index)
+        self.data.insert(0, newitem)
 
         current_index = 0
-        while True:
-            child_index = 2 * current_index + 1
-            if child_index > self.last_index:
-                break
+        while (child_index := current_index * 2 + 1) <= self.last_index: # 子供のindexがリストの範囲内
             left_item = self.data[child_index]
             child_index += 1
             if child_index > self.last_index:
                 if left_item < self.data[current_index]:
                     self.swap(child_index - 1, current_index)
+                    current_index = child_index - 1
                 break
+
             right_item = self.data[child_index]
             if right_item < self.data[current_index]:
                 if right_item < left_item:
