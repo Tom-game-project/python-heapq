@@ -1,10 +1,11 @@
 
 class priorityq:
-    def __init__(self,data:list[int]):
-        self.data:list = data
+
+    def __init__(self, data:list[int]):
+        self.data:list[int] = data
         self.last_index:int = len(self.data) - 1
 
-    def push(self,a:int):
+    def push(self, a:int):
         self.data.append(a)
         self.last_index += 1
         current_index = self.last_index
@@ -17,7 +18,7 @@ class priorityq:
             break
         self.data[current_index] = a
 
-    def pop(self):
+    def pop(self) -> int:
         rvalue = self.data.pop(0)
         if self.last_index == 0:
             return rvalue

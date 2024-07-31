@@ -4,8 +4,12 @@ import heapq
 import copy
 from priorityq import priorityq
 
+GREEN = '\033[92m'
+RED = '\033[31m'
+END = '\033[0m' 
+
 def my_test(lst:list):
-    print(lst[0:10])
+    print("length",len(lst),lst[0:5],"...",lst[-6:-1], end = "")
     pq=priorityq([])
     for i in lst:
         pq.push(i)
@@ -19,9 +23,10 @@ def my_test(lst:list):
         push_test(pq.data)
         assert(j >= pre_poped)
         pre_poped = j
-    
+    print(GREEN + " ----> OK" + END)
+
 def py_test(lst:list):
-    print(lst[0:10])
+    print("length",len(lst),lst[0:5],"...",lst[-6:-1], end = "")
     pq=[]
     for i in lst:
         heapq.heappush(pq,i)
@@ -35,10 +40,9 @@ def py_test(lst:list):
         push_test(pq)
         assert(j >= pre_poped)
         pre_poped = j
+    print(GREEN + " ----> OK" + END)
 
 def push_test(lst:list):
-    RED = '\033[31m'
-    END = '\033[0m' 
     current_index = 0
     last_index = len(lst) - 1
     while True:
@@ -64,9 +68,6 @@ def push_test(lst:list):
         current_index += 1
     
 if __name__ == "__main__":
-    GREEN = '\033[92m'
-    END = '\033[0m' 
-
     lst_lst:list[list[int]] = []
     for i in range(10):
         lst = list(range(10001))
