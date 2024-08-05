@@ -6,7 +6,12 @@ class priorityq:
     """
     def __init__(self, data:list[int]):
         self.__data:list[int] = data
-        self.last_index:int = len(self.__data) - 1
+
+    def __getitem__(self,key:int) -> int:
+        return self.data[key]
+
+    def __len__(self) -> int:
+        return len(self.data)
 
     @property
     def data(self):
@@ -17,12 +22,11 @@ class priorityq:
         push to heapq
         """
         self.__data.append(a)
-        self.last_index += 1
-        current_index = self.last_index
+        current_index = len(self) - 1
         while current_index > 0:
             parent_index = (current_index - 1) // 2
-            if a < self.__data[parent_index]:
-                self.__data[current_index] = self.__data[parent_index]
+            if a < self[parent_index]:
+                self.__data[current_index] = self[parent_index]
                 current_index = parent_index
                 continue
             break
@@ -33,24 +37,24 @@ class priorityq:
         return minimum element of heapq and delete it
         """
         rvalue = self.__data.pop(0)
-        if self.last_index == 0:
+        if not self.__data:
             return rvalue
-        self.last_index -= 1
-        newitem = self.__data.pop(self.last_index)
+        last_index = len(self) - 1
+        newitem = self.__data.pop(last_index)
         self.__data.insert(0, newitem)
 
         current_index = 0
-        current_item = self.__data[current_index]
-        while (child_index := current_index * 2 + 1) <= self.last_index: # 子供のindexがリストの範囲内
-            left_item = self.__data[child_index]
+        current_item = self[current_index]
+        while (child_index := current_index * 2 + 1) <= last_index:
+            left_item = self[child_index]
             child_index += 1
-            if child_index > self.last_index:
+            if child_index > last_index:
                 if left_item < current_item:
                     self.__data[current_index] = left_item
                     current_index = child_index - 1
                 break
 
-            right_item = self.__data[child_index]
+            right_item = self[child_index]
             if right_item < current_item:
                 if right_item < left_item:
                     self.__data[current_index] = right_item
