@@ -1,2 +1,2 @@
-# Class Baseed Heapq Algorithm
+# Class Based Heapq Algorithm
 
