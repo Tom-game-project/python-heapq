@@ -2,7 +2,8 @@ import random
 import time
 import heapq
 import copy
-from src.python_heapq.priorityq import priorityq
+from python_heapq import priorityq
+
 
 GREEN = '\033[92m'
 RED = '\033[31m'
