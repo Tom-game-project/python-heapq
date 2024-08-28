@@ -2,11 +2,11 @@ import random
 import time
 import heapq
 import copy
-from priorityq import priorityq
+from src.python_heapq.priorityq import priorityq
 
 GREEN = '\033[92m'
 RED = '\033[31m'
-END = '\033[0m' 
+END = '\033[0m'
 
 def my_test(lst:list):
     print("length",len(lst),lst[0:5],"...",lst[-6:-1], end = "")
