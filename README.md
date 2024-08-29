@@ -6,7 +6,9 @@
 pip install python-heapq
 ```
 
-## How to use
+## Example
+
+Priorityq pushes and pops while maintaining the structure of the heap. Push an element and then pop it to get a sorted list.
 
 ```python
 from python_heapq import priorityq
