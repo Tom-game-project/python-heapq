@@ -43,30 +43,30 @@ class priorityq:
         newitem = self.__data.pop(last_index)
         self.__data.insert(0, newitem)
 
+        self.__data[self.__pop_proc(last_index)] = newitem
+        return rvalue
+    
+    def __pop_proc(self,last_index:int) -> int:
         current_index = 0
         current_item = self[current_index]
+
         while (child_index := current_index * 2 + 1) <= last_index:
             left_item = self[child_index]
-            child_index += 1
-            if child_index > last_index:
+            if last_index <= child_index:
                 if left_item < current_item:
                     self.__data[current_index] = left_item
-                    current_index = child_index - 1
+                    current_index = child_index 
                 break
-
+            child_index += 1
             right_item = self[child_index]
-            if right_item < current_item:
-                if right_item < left_item:
-                    self.__data[current_index] = right_item
-                    current_index = child_index
-                else:
-                    self.__data[current_index] = left_item
-                    current_index = child_index - 1
+            if right_item < current_item and right_item < left_item:
+                self.__data[current_index] = right_item
+                current_index = child_index
                 continue
-            elif left_item < current_item:
+            elif right_item < current_item or left_item < current_item:
                 self.__data[current_index] = left_item
                 current_index = child_index - 1
                 continue
             break
-        self.__data[current_index] = newitem
-        return rvalue
+        return current_index
+    
