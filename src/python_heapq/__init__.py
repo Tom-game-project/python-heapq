@@ -57,16 +57,17 @@ class priorityq:
                     self.__data[current_index] = left_item
                     current_index = child_index 
                 break
-            child_index += 1
-            right_item = self[child_index]
+            right_item = self[child_index + 1]
             if right_item < current_item and right_item < left_item:
                 self.__data[current_index] = right_item
-                current_index = child_index
+                current_index = child_index + 1
                 continue
             elif right_item < current_item or left_item < current_item:
                 self.__data[current_index] = left_item
-                current_index = child_index - 1
+                current_index = child_index
                 continue
             break
         return current_index
     
+    def _pop_loop_proc():
+        pass
